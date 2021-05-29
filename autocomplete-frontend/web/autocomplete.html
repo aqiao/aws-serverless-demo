@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>jQuery UI Autocomplete - Remote datasource</title>
+    <link rel="stylesheet" href="jquery-ui-1.12.1.custom/jquery-ui.min.css">
+    <script src="jquery-3.6.0.min.js"></script>
+    <script src="jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+    <style>
+        .ui-autocomplete-loading {
+          background: white url("jquery-ui-1.12.1.custom/images/ui-anim_basic_16x16.gif") right center no-repeat;
+        }
+        .ui-widget button {
+          background-color:rgb(61, 148, 219);
+          color: white;
+          height: 30px;
+        }
+        .ui-widget input {
+          height: 26px;
+          width: 400px;
+        }
+        body {
+          padding-top: 5%;
+          text-align:center;
+          min-height: 200px;
+         }
+         body div p{
+          position: fixed;
+          bottom: 0px;
+          text-align: center;
+          width: 100%;
+          font-weight: bolder;
+         }
+         #div-logo img{
+          content:url("jquery-ui-1.12.1.custom/images/logo.gif");
+          width:10%;
+          height:10%
+         }
+    </style>
+    <script>
+      $(function() {
+        function log( message ) {
+          $( "<div>" ).text( message ).prependTo( "#log" );
+          $( "#log" ).scrollTop( 0 );
+        }
+        $( "#input-keyword" ).autocomplete({
+          source: function( request, response ) {
+            $.ajax({
+              url: "http://localhost:8080/post",
+              dataType: "json",
+              cache:false,
+              data: {
+                'k':request.term
+              },
+              success: function(data) {
+                // console.log(data.data);
+                var items=new Array();
+                $.each(data.data,function(i,e){
+                  console.log(e);
+                  items.push(e.title);
+                });
+                response(items);
+              },
+              error: function(err){
+                alert(err);
+              }
+            });
+          },
+          minLength: 3,
+          select: function( event, ui ) {
+            log( ui.item ?
+              "Selected: " + ui.item.label :
+              "Nothing selected, input was " + this.value);
+          },
+          open: function() {
+            $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+          },
+          close: function() {
+            $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+          }
+        });
+      });
+  </script>
+</head>
+<body>
+  <div id="div-logo"><img/></div>
+  <div class="ui-widget">
+      <input id="input-keyword" autocomplete="on">
+      <button id="btn-submit" value="Search" class="ui-autocomplete-btn">Search</button>
+  </div>
+
+  <!-- <div class="ui-widget" style="margin-top:2em; font-family:Arial">
+      Result:
+      <div id="log" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
+  </div> -->
+  <div><p>Auto completed demo based on AWS- 2021</p></div>
+</body>
+</html>
