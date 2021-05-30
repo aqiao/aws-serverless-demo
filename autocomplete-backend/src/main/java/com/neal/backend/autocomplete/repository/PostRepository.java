@@ -1,9 +1,10 @@
 package com.neal.backend.autocomplete.repository;
 
 import com.neal.backend.autocomplete.model.Post;
-import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
-import org.springframework.data.repository.CrudRepository;
 
-@EnableScan
-public interface PostRepository extends CrudRepository<Post,String> {
+public interface PostRepository {
+  void save(Post post);
+  void remove(String id);
+  Iterable<Post> findAll();
+  Iterable<Post> findByTitlePrefix(String prefix);
 }
