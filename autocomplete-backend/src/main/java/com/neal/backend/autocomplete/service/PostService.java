@@ -14,4 +14,10 @@ public class PostService {
   public Iterable<Post> findAll(){
     return postRepository.findAll();
   }
+
+  public Iterable<Post> findByTitlePrefix(String prefix){
+    if(prefix==null||prefix.length()==0)
+      return null;
+    return postRepository.findByTitlePrefix(prefix);
+  }
 }
