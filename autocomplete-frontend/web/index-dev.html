@@ -47,7 +47,7 @@
         $( "#input-keyword" ).autocomplete({
           source: function( request, response ) {
             $.ajax({
-              url: "https://eui0fz92l3.execute-api.us-east-1.amazonaws.com/prod/post/title",
+              url: "http://localhost:8080/post/title",
               dataType: "json",
               cache:false,
               data: {
@@ -55,6 +55,12 @@
               },
               success: function(data) {
                 console.log(data.data);
+                // var items=new Array();
+                // $.each(data.data,function(i,e){
+                //   console.log(e);
+                //   items.push(e.title);
+                // });
+                // response(data.data);
                 response( $.map( data.data, function( item ) {
 			                       return {
 			                         label: item.title,
@@ -69,6 +75,10 @@
             });
           },
           minLength: 3,
+          // focus: function( event, ui ) {
+          //   $( "#input-keyword" ).val( ui.item.title );
+          //   return false;
+          // },
           select: function( event, ui ) {
             log( ui.item ?
               "Selected: " + ui.item.title :
